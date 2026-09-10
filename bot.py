@@ -9,30 +9,37 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton
 
 
+# =========================================================
+# SOZLAMALAR
+# =========================================================
+
 TOKEN = os.getenv("BOT_TOKEN")
 PORT = int(os.getenv("PORT", 10000))
+
+if not TOKEN:
+    raise ValueError("BOT_TOKEN topilmadi!")
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
 
-# =========================
+# =========================================================
 # HOLATLAR
-# =========================
+# =========================================================
 
 class Registration(StatesGroup):
     name = State()
     grade = State()
-    goal = State()
 
 
-class TestState(StatesGroup):
-    answering = State()
+class StudentState(StatesGroup):
+    menu = State()
+    subject = State()
 
 
-# =========================
+# =========================================================
 # TUGMALAR
-# =========================
+# =========================================================
 
 start_keyboard = ReplyKeyboardMarkup(
     keyboard=[
@@ -41,312 +48,214 @@ start_keyboard = ReplyKeyboardMarkup(
     resize_keyboard=True
 )
 
+
 grade_keyboard = ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton(text="1-sinf"),
             KeyboardButton(text="2-sinf"),
             KeyboardButton(text="3-sinf")
         ],
         [
-            KeyboardButton(text="4-sinf"),
-            KeyboardButton(text="5-sinf"),
-            KeyboardButton(text="6-sinf")
-        ],
-        [
-            KeyboardButton(text="7-sinf"),
-            KeyboardButton(text="8-sinf"),
-            KeyboardButton(text="9-sinf")
-        ],
-        [
-            KeyboardButton(text="10-sinf"),
-            KeyboardButton(text="11-sinf")
+            KeyboardButton(text="4-sinf")
         ]
     ],
     resize_keyboard=True
 )
 
-goal_keyboard = ReplyKeyboardMarkup(
+
+subject_keyboard = ReplyKeyboardMarkup(
     keyboard=[
-        [KeyboardButton(text="🏫 Prezident maktabi")],
-        [KeyboardButton(text="🏆 Olimpiada")],
-        [KeyboardButton(text="📚 Bilimimni oshirish")],
-        [KeyboardButton(text="🎯 Boshqa maqsad")]
+        [KeyboardButton(text="🇬🇧 Ingliz tili")],
+        [KeyboardButton(text="🔢 Matematika")],
+        [KeyboardButton(text="🧠 Tanqidiy fikrlash")],
+        [KeyboardButton(text="🧩 Muammoli masalalar")]
     ],
     resize_keyboard=True
 )
 
 
-# =========================
-# TEST SAVOLLARI
-# =========================
+back_keyboard = ReplyKeyboardMarkup(
+    keyboard=[
+        [KeyboardButton(text="⬅️ Fanlarga qaytish")]
+    ],
+    resize_keyboard=True
+)
 
-questions = [
 
-    # ===== MATEMATIKA 1-20 =====
+# =========================================================
+# 8 OYLIK DASTUR
+# =========================================================
 
-    {
-        "subject": "➗ MATEMATIKA",
-        "question": "1. 48 + 27 = ?",
-        "options": ["65", "75", "85", "70"],
-        "answer": "75"
-    },
-    {
-        "subject": "➗ MATEMATIKA",
-        "question": "2. 96 - 38 = ?",
-        "options": ["58", "68", "48", "62"],
-        "answer": "58"
-    },
-    {
-        "subject": "➗ MATEMATIKA",
-        "question": "3. 7 × 8 = ?",
-        "options": ["54", "56", "64", "48"],
-        "answer": "56"
-    },
-    {
-        "subject": "➗ MATEMATIKA",
-        "question": "4. 81 ÷ 9 = ?",
-        "options": ["7", "8", "9", "10"],
-        "answer": "9"
-    },
-    {
-        "subject": "➗ MATEMATIKA",
-        "question": "5. 125 + 375 = ?",
-        "options": ["400", "450", "500", "550"],
-        "answer": "500"
-    },
-    {
-        "subject": "➗ MATEMATIKA",
-        "question": "6. 15 × 6 = ?",
-        "options": ["80", "90", "100", "75"],
-        "answer": "90"
-    },
-    {
-        "subject": "➗ MATEMATIKA",
-        "question": "7. 144 ÷ 12 = ?",
-        "options": ["10", "11", "12", "14"],
-        "answer": "12"
-    },
-    {
-        "subject": "➗ MATEMATIKA",
-        "question": "8. 3/4 ning 20 ga ko‘paytmasi nechaga teng?",
-        "options": ["12", "15", "16", "18"],
-        "answer": "15"
-    },
-    {
-        "subject": "➗ MATEMATIKA",
-        "question": "9. 2,5 + 3,7 = ?",
-        "options": ["5,2", "6,2", "6,7", "5,7"],
-        "answer": "6,2"
-    },
-    {
-        "subject": "➗ MATEMATIKA",
-        "question": "10. 200 ning 25% i nechaga teng?",
-        "options": ["25", "40", "50", "75"],
-        "answer": "50"
-    },
-    {
-        "subject": "➗ MATEMATIKA",
-        "question": "11. x + 17 = 42. x = ?",
-        "options": ["15", "20", "25", "27"],
-        "answer": "25"
-    },
-    {
-        "subject": "➗ MATEMATIKA",
-        "question": "12. 5x = 45. x = ?",
-        "options": ["7", "8", "9", "10"],
-        "answer": "9"
-    },
-    {
-        "subject": "➗ MATEMATIKA",
-        "question": "13. To‘g‘ri to‘rtburchakning tomonlari 8 sm va 5 sm. Yuzi?",
-        "options": ["13", "26", "40", "45"],
-        "answer": "40"
-    },
-    {
-        "subject": "➗ MATEMATIKA",
-        "question": "14. Kvadrat tomoni 7 sm. Perimetri?",
-        "options": ["14", "21", "28", "49"],
-        "answer": "28"
-    },
-    {
-        "subject": "➗ MATEMATIKA",
-        "question": "15. 1 soat 35 daqiqa necha daqiqa?",
-        "options": ["85", "90", "95", "105"],
-        "answer": "95"
-    },
-    {
-        "subject": "➗ MATEMATIKA",
-        "question": "16. Ketma-ketlikni davom ettiring: 3, 6, 12, 24, ...",
-        "options": ["36", "42", "48", "54"],
-        "answer": "48"
-    },
-    {
-        "subject": "➗ MATEMATIKA",
-        "question": "17. 450 ning 10% i?",
-        "options": ["35", "40", "45", "50"],
-        "answer": "45"
-    },
-    {
-        "subject": "➗ MATEMATIKA",
-        "question": "18. 2² + 3² = ?",
-        "options": ["10", "11", "12", "13"],
-        "answer": "13"
-    },
-    {
-        "subject": "➗ MATEMATIKA",
-        "question": "19. 72 ning 1/8 qismi?",
-        "options": ["8", "9", "10", "12"],
-        "answer": "9"
-    },
-    {
-        "subject": "➗ MATEMATIKA",
-        "question": "20. 4 ta daftar 28 000 so‘m. 1 ta daftar qancha?",
-        "options": ["5 000", "6 000", "7 000", "8 000"],
-        "answer": "7 000"
-    },
+PROGRAMS = {
 
-    # ===== ENGLISH 21-30 =====
+    # =====================================================
+    # INGLIZ TILI
+    # =====================================================
 
-    {
-        "subject": "🇬🇧 ENGLISH",
-        "question": "21. Choose the correct answer: She ___ a student.",
-        "options": ["am", "is", "are", "be"],
-        "answer": "is"
-    },
-    {
-        "subject": "🇬🇧 ENGLISH",
-        "question": "22. I ___ football every Sunday.",
-        "options": ["play", "plays", "playing", "played"],
-        "answer": "play"
-    },
-    {
-        "subject": "🇬🇧 ENGLISH",
-        "question": "23. What is the opposite of 'big'?",
-        "options": ["long", "small", "tall", "fast"],
-        "answer": "small"
-    },
-    {
-        "subject": "🇬🇧 ENGLISH",
-        "question": "24. There ___ three books on the table.",
-        "options": ["is", "am", "are", "be"],
-        "answer": "are"
-    },
-    {
-        "subject": "🇬🇧 ENGLISH",
-        "question": "25. Yesterday I ___ to school.",
-        "options": ["go", "goes", "went", "going"],
-        "answer": "went"
-    },
-    {
-        "subject": "🇬🇧 ENGLISH",
-        "question": "26. Choose the correct plural: child → ?",
-        "options": ["childs", "children", "childes", "childrens"],
-        "answer": "children"
-    },
-    {
-        "subject": "🇬🇧 ENGLISH",
-        "question": "27. My brother is ___ than me.",
-        "options": ["tall", "taller", "tallest", "more tall"],
-        "answer": "taller"
-    },
-    {
-        "subject": "🇬🇧 ENGLISH",
-        "question": "28. We ___ watching TV now.",
-        "options": ["is", "are", "am", "be"],
-        "answer": "are"
-    },
-    {
-        "subject": "🇬🇧 ENGLISH",
-        "question": "29. What does 'beautiful' mean?",
-        "options": ["chiroyli", "tez", "katta", "sovuq"],
-        "answer": "chiroyli"
-    },
-    {
-        "subject": "🇬🇧 ENGLISH",
-        "question": "30. Choose the correct sentence.",
-        "options": [
-            "He don't like apples.",
-            "He doesn't like apples.",
-            "He doesn't likes apples.",
-            "He not like apples."
+    "🇬🇧 Ingliz tili": {
+
+        "2-sinf": [
+            "1-oy — Alphabet, numbers, colors, family",
+            "2-oy — School, animals, body parts",
+            "3-oy — am / is / are",
+            "4-oy — have / has, this / that",
+            "5-oy — There is / There are",
+            "6-oy — Basic verbs va everyday actions",
+            "7-oy — Simple reading va vocabulary",
+            "8-oy — Yakuniy test va Prezident maktabi mashqlari"
         ],
-        "answer": "He doesn't like apples."
-    },
 
-    # ===== MANTIQ 31-40 =====
-
-    {
-        "subject": "🧠 MANTIQ",
-        "question": "31. 2, 4, 8, 16, ... Keyingi son?",
-        "options": ["20", "24", "32", "36"],
-        "answer": "32"
-    },
-    {
-        "subject": "🧠 MANTIQ",
-        "question": "32. 1, 4, 9, 16, ... Keyingi son?",
-        "options": ["20", "24", "25", "36"],
-        "answer": "25"
-    },
-    {
-        "subject": "🧠 MANTIQ",
-        "question": "33. Bir qatorda 5 bola turibdi. Aziz chapdan 2-o‘rinda. Bobur Azizning o‘ng tomonida. Bobur qaysi o‘rinda turishi mumkin?",
-        "options": ["1-o‘rin", "2-o‘rin", "3-o‘rin", "Faqat 5-o‘rin"],
-        "answer": "3-o‘rin"
-    },
-    {
-        "subject": "🧠 MANTIQ",
-        "question": "34. 5 ta olma bor. 5 bolaga bittadan berildi, lekin savatda 1 ta olma qoldi. Qanday?",
-        "options": [
-            "Olma yashirildi",
-            "Oxirgi bolaga olma savati bilan berildi",
-            "Bitta olma buzilgan",
-            "Bu mumkin emas"
+        "3-sinf": [
+            "1-oy — Vocabulary va Present Simple",
+            "2-oy — Present Continuous",
+            "3-oy — Past Simple",
+            "4-oy — Can / Can't, have / has",
+            "5-oy — Comparatives va Superlatives",
+            "6-oy — Question words va Prepositions",
+            "7-oy — Reading comprehension",
+            "8-oy — Grammar + Reading yakuniy testlari"
         ],
-        "answer": "Oxirgi bolaga olma savati bilan berildi"
+
+        "4-sinf": [
+            "1-oy — Present Simple / Present Continuous",
+            "2-oy — Past Simple",
+            "3-oy — Future va Modal verbs",
+            "4-oy — Articles, Pronouns, Prepositions",
+            "5-oy — Comparatives / Superlatives",
+            "6-oy — Vocabulary in context",
+            "7-oy — Murakkab Reading comprehension",
+            "8-oy — Prezident maktabi formatidagi English testlar"
+        ]
     },
-    {
-        "subject": "🧠 MANTIQ",
-        "question": "35. Qaysi biri boshqalardan farq qiladi?",
-        "options": ["2", "4", "8", "11"],
-        "answer": "11"
+
+
+    # =====================================================
+    # MATEMATIKA
+    # =====================================================
+
+    "🔢 Matematika": {
+
+        "2-sinf": [
+            "1-oy — Sonlar va taqqoslash",
+            "2-oy — Qo‘shish va ayirish",
+            "3-oy — Ko‘paytirish va bo‘lish",
+            "4-oy — Vaqt, pul va o‘lchov birliklari",
+            "5-oy — Geometrik shakllar",
+            "6-oy — Perimetr va sodda masalalar",
+            "7-oy — Sonli ketma-ketliklar",
+            "8-oy — Murakkab aralash masalalar"
+        ],
+
+        "3-sinf": [
+            "1-oy — Ko‘p xonali sonlar",
+            "2-oy — 4 amalni mustahkamlash",
+            "3-oy — Kasr tushunchasi",
+            "4-oy — Perimetr va yuza",
+            "5-oy — Tenglamalar",
+            "6-oy — Jadval va diagrammalar",
+            "7-oy — 2–3 bosqichli masalalar",
+            "8-oy — Murakkab aralash testlar"
+        ],
+
+        "4-sinf": [
+            "1-oy — Murakkab arifmetik amallar",
+            "2-oy — Kasrlar va ulushlar",
+            "3-oy — Tenglamalar va noma’lum son",
+            "4-oy — Perimetr va yuza",
+            "5-oy — Vaqt, masofa va tezlik",
+            "6-oy — Ketma-ketliklar va sonli mantiq",
+            "7-oy — Kombinatorika va nostandart masalalar",
+            "8-oy — Prezident maktabi darajasidagi matematika"
+        ]
     },
-    {
-        "subject": "🧠 MANTIQ",
-        "question": "36. Bugun dushanba bo‘lsa, 10 kundan keyin qaysi kun?",
-        "options": ["Chorshanba", "Payshanba", "Juma", "Shanba"],
-        "answer": "Payshanba"
+
+
+    # =====================================================
+    # TANQIDIY FIKRLASH
+    # =====================================================
+
+    "🧠 Tanqidiy fikrlash": {
+
+        "2-sinf": [
+            "1-oy — O‘xshashlik va farq",
+            "2-oy — Ortiqchasini topish",
+            "3-oy — Ketma-ketlik",
+            "4-oy — Tasniflash",
+            "5-oy — Shakllar va naqshlar",
+            "6-oy — Oddiy kodlar",
+            "7-oy — Sabab va oqibat",
+            "8-oy — Mantiqiy yakuniy test"
+        ],
+
+        "3-sinf": [
+            "1-oy — Qoidani aniqlash",
+            "2-oy — Murakkab ketma-ketlik",
+            "3-oy — Jadval bilan ishlash",
+            "4-oy — Kodlash va belgilar",
+            "5-oy — Taqqoslash",
+            "6-oy — Sabab–oqibat",
+            "7-oy — Xulosa chiqarish",
+            "8-oy — Aralash Critical Thinking testi"
+        ],
+
+        "4-sinf": [
+            "1-oy — Murakkab ketma-ketliklar",
+            "2-oy — Mantiqiy jadval",
+            "3-oy — Kodlash",
+            "4-oy — Rost / yolg‘on",
+            "5-oy — Dalil va xulosa",
+            "6-oy — Bir nechta shartli masalalar",
+            "7-oy — Strategik fikrlash",
+            "8-oy — Prezident maktabi Reasoning testi"
+        ]
     },
-    {
-        "subject": "🧠 MANTIQ",
-        "question": "37. 3 ta mushuk 3 daqiqada 3 ta sichqon tutadi. 1 mushuk 3 daqiqada nechta sichqon tutadi?",
-        "options": ["1", "2", "3", "9"],
-        "answer": "1"
-    },
-    {
-        "subject": "🧠 MANTIQ",
-        "question": "38. 10, 20, 40, 80, ...",
-        "options": ["100", "120", "140", "160"],
-        "answer": "160"
-    },
-    {
-        "subject": "🧠 MANTIQ",
-        "question": "39. Agar barcha A lar B bo‘lsa va barcha B lar C bo‘lsa, A lar nima bo‘ladi?",
-        "options": ["C", "D", "A emas", "Aniqlab bo‘lmaydi"],
-        "answer": "C"
-    },
-    {
-        "subject": "🧠 MANTIQ",
-        "question": "40. 1 kg paxta va 1 kg temirdan qaysi biri og‘ir?",
-        "options": ["Paxta", "Temir", "Ikkalasi teng", "Sharoitga bog‘liq"],
-        "answer": "Ikkalasi teng"
+
+
+    # =====================================================
+    # MUAMMOLI MASALALAR
+    # =====================================================
+
+    "🧩 Muammoli masalalar": {
+
+        "2-sinf": [
+            "1-oy — Oddiy hayotiy masalalar",
+            "2-oy — Ko‘p va kam",
+            "3-oy — Qancha qoldi?",
+            "4-oy — 1–2 bosqichli masalalar",
+            "5-oy — Rasm asosidagi masalalar",
+            "6-oy — Vaqt va pul masalalari",
+            "7-oy — Noodatiy savollar",
+            "8-oy — Challenge masalalar"
+        ],
+
+        "3-sinf": [
+            "1-oy — 2–3 bosqichli masalalar",
+            "2-oy — Orqaga qarab yechish",
+            "3-oy — Jadval yordamida yechish",
+            "4-oy — Chizma yordamida yechish",
+            "5-oy — Yetishmayotgan ma’lumot",
+            "6-oy — Eng kam / eng ko‘p",
+            "7-oy — Yosh, vaqt va masofa masalalari",
+            "8-oy — Murakkab muammoli masalalar"
+        ],
+
+        "4-sinf": [
+            "1-oy — Murakkab shartli masalalar",
+            "2-oy — Orqaga yurib yechish",
+            "3-oy — Jadval va chizma",
+            "4-oy — Bir nechta yechimli masalalar",
+            "5-oy — Minimal / maksimal",
+            "6-oy — Kombinatorik masalalar",
+            "7-oy — Geometrik muammolar",
+            "8-oy — Prezident maktabi + Olimpiada Challenge"
+        ]
     }
-]
+}
 
 
-# =========================
+# =========================================================
 # START
-# =========================
+# =========================================================
 
 @dp.message(CommandStart())
 async def start(message: Message, state: FSMContext):
@@ -354,258 +263,188 @@ async def start(message: Message, state: FSMContext):
     await state.clear()
 
     await message.answer(
-        "🇺🇿 Assalomu alaykum!\n\n"
-        "🎓 IMA Prezident School AI Bot'iga xush kelibsiz!\n\n"
-        "Bu bot sizni 8 oy davomida Prezident maktabi "
-        "imtihoniga bosqichma-bosqich tayyorlaydi.\n\n"
-        "🇬🇧 English\n"
-        "➗ Matematika\n"
-        "🧠 Mantiq\n"
-        "🤖 AI tahlil\n\n"
-        "Tayyorgarlikni boshlash uchun tugmani bosing:",
+        "🇺🇿 ASSALOMU ALAYKUM!\n\n"
+        "🎓 IMA PREZIDENT SCHOOL AI\n\n"
+        "🏫 Prezident maktabiga tayyorlov platformasi.\n\n"
+        "👦 2–4-sinf o‘quvchilari uchun.\n\n"
+        "⭐ ASOSIY YO‘NALISHLAR:\n\n"
+        "🇬🇧 Ingliz tili\n"
+        "🔢 Matematika\n"
+        "🧠 Tanqidiy fikrlash\n"
+        "🧩 Muammoli masalalar\n\n"
+        "🚀 Tayyorgarlikni boshlash uchun tugmani bosing.",
         reply_markup=start_keyboard
     )
 
 
-# =========================
+# =========================================================
 # BOSHLASH
-# =========================
+# =========================================================
 
 @dp.message(F.text == "🚀 Boshlash")
-async def begin_registration(message: Message, state: FSMContext):
+async def begin(message: Message, state: FSMContext):
 
     await message.answer(
-        "👤 Ajoyib!\n\n"
-        "Avval siz haqingizda ma'lumot olamiz.\n\n"
+        "👤 O‘QUVCHI PROFILI\n\n"
         "✍️ Ism va familiyangizni kiriting:"
     )
 
     await state.set_state(Registration.name)
 
 
-# =========================
+# =========================================================
 # ISM
-# =========================
+# =========================================================
 
 @dp.message(Registration.name)
 async def get_name(message: Message, state: FSMContext):
 
-    name = message.text.strip()
+    name = (message.text or "").strip()
 
     if len(name) < 3:
         await message.answer(
-            "❗ Ism va familiyangizni to‘liqroq kiriting."
+            "❗ Iltimos, ism va familiyani to‘liqroq kiriting."
         )
         return
 
     await state.update_data(name=name)
 
     await message.answer(
-        "🎒 Nechanchi sinfda o‘qiysiz?",
+        "🎒 O‘quvchi nechanchi sinfda o‘qiydi?\n\n"
+        "Faqat 2–4-sinf.",
         reply_markup=grade_keyboard
     )
 
     await state.set_state(Registration.grade)
 
 
-# =========================
+# =========================================================
 # SINF
-# =========================
+# =========================================================
 
 @dp.message(Registration.grade)
 async def get_grade(message: Message, state: FSMContext):
 
-    grade = message.text.strip()
+    grade = (message.text or "").strip()
 
-    valid_grades = [
-        "1-sinf", "2-sinf", "3-sinf",
-        "4-sinf", "5-sinf", "6-sinf",
-        "7-sinf", "8-sinf", "9-sinf",
-        "10-sinf", "11-sinf"
-    ]
-
-    if grade not in valid_grades:
+    if grade not in ["2-sinf", "3-sinf", "4-sinf"]:
         await message.answer(
-            "❗ Iltimos, sinfni tugmalardan tanlang.",
+            "❗ Faqat 2-, 3- yoki 4-sinfni tanlang.",
             reply_markup=grade_keyboard
         )
         return
 
     await state.update_data(grade=grade)
 
-    await message.answer(
-        "🎯 Asosiy maqsadingiz nima?",
-        reply_markup=goal_keyboard
-    )
-
-    await state.set_state(Registration.goal)
-
-
-# =========================
-# MAQSAD
-# =========================
-
-@dp.message(Registration.goal)
-async def get_goal(message: Message, state: FSMContext):
-
-    goal = message.text.strip()
-
-    valid_goals = [
-        "🏫 Prezident maktabi",
-        "🏆 Olimpiada",
-        "📚 Bilimimni oshirish",
-        "🎯 Boshqa maqsad"
-    ]
-
-    if goal not in valid_goals:
-        await message.answer(
-            "❗ Iltimos, maqsadni tugmalardan tanlang.",
-            reply_markup=goal_keyboard
-        )
-        return
-
-    await state.update_data(goal=goal)
-
     data = await state.get_data()
 
-    await message.answer(
-        "✅ RO‘YXATDAN O‘TISH YAKUNLANDI!\n\n"
-        f"👤 Ism: {data['name']}\n"
-        f"🎒 Sinf: {data['grade']}\n"
-        f"🎯 Maqsad: {data['goal']}\n\n"
-        "📝 Endi diagnostika boshlanadi.\n\n"
-        "📊 40 ta savol\n"
-        "➗ 20 ta matematika\n"
-        "🇬🇧 10 ta English\n"
-        "🧠 10 ta mantiq\n\n"
-        "Har bir savolga faqat bitta javob tanlang."
-    )
-
-    await asyncio.sleep(1)
-
-    await state.update_data(
-        question_index=0,
-        score=0
-    )
-
-    await state.set_state(TestState.answering)
-
-    await send_question(message, state)
-
-
-# =========================
-# SAVOL YUBORISH
-# =========================
-
-async def send_question(message: Message, state: FSMContext):
-
-    data = await state.get_data()
-
-    index = data["question_index"]
-
-    if index >= len(questions):
-        await finish_test(message, state)
-        return
-
-    q = questions[index]
-
-    keyboard = ReplyKeyboardMarkup(
-        keyboard=[
-            [KeyboardButton(text=q["options"][0])],
-            [KeyboardButton(text=q["options"][1])],
-            [KeyboardButton(text=q["options"][2])],
-            [KeyboardButton(text=q["options"][3])]
-        ],
-        resize_keyboard=True
-    )
+    await state.set_state(StudentState.menu)
 
     await message.answer(
-        f"📊 SAVOL {index + 1} / {len(questions)}\n\n"
-        f"{q['subject']}\n\n"
-        f"❓ {q['question']}",
-        reply_markup=keyboard
-    )
-
-
-# =========================
-# JAVOBNI TEKSHIRISH
-# =========================
-
-@dp.message(TestState.answering)
-async def check_answer(message: Message, state: FSMContext):
-
-    data = await state.get_data()
-
-    index = data["question_index"]
-
-    if index >= len(questions):
-        return
-
-    selected = message.text.strip()
-
-    q = questions[index]
-
-    score = data["score"]
-
-    if selected == q["answer"]:
-        score += 1
-        await message.answer("✅ To‘g‘ri!")
-    else:
-        await message.answer(
-            f"❌ Noto‘g‘ri.\n"
-            f"To‘g‘ri javob: {q['answer']}"
-        )
-
-    index += 1
-
-    await state.update_data(
-        question_index=index,
-        score=score
-    )
-
-    await asyncio.sleep(0.3)
-
-    await send_question(message, state)
-
-
-# =========================
-# NATIJA
-# =========================
-
-async def finish_test(message: Message, state: FSMContext):
-
-    data = await state.get_data()
-
-    score = data["score"]
-
-    percentage = score / len(questions) * 100
-
-    if percentage >= 90:
-        level = "🏆 JUDA YUQORI"
-    elif percentage >= 75:
-        level = "🥇 YAXSHI"
-    elif percentage >= 60:
-        level = "🥈 O‘RTA"
-    else:
-        level = "📚 RIVOJLANTIRISH KERAK"
-
-    await message.answer(
-        "🎉 DIAGNOSTIKA YAKUNLANDI!\n\n"
+        "✅ PROFIL TAYYOR!\n\n"
         f"👤 O‘quvchi: {data['name']}\n"
-        f"🎒 Sinf: {data['grade']}\n\n"
-        f"📊 Natija: {score} / 40\n"
-        f"📈 Foiz: {percentage:.0f}%\n\n"
-        f"🏅 Daraja: {level}\n\n"
-        "🤖 Keyingi bosqichda sizning xatolaringiz "
-        "tahlil qilinadi va individual o‘quv reja tuziladi."
+        f"🎒 Sinf: {grade}\n\n"
+        "🏆 Endi o‘zingizga kerakli yo‘nalishni tanlang:",
+        reply_markup=subject_keyboard
     )
 
-    await state.clear()
+
+# =========================================================
+# FAN TANLASH
+# =========================================================
+
+@dp.message(
+    StudentState.menu,
+    F.text.in_([
+        "🇬🇧 Ingliz tili",
+        "🔢 Matematika",
+        "🧠 Tanqidiy fikrlash",
+        "🧩 Muammoli masalalar"
+    ])
+)
+async def choose_subject(message: Message, state: FSMContext):
+
+    subject = message.text
+
+    await state.update_data(subject=subject)
+
+    data = await state.get_data()
+
+    grade = data.get("grade")
+
+    lessons = PROGRAMS[subject][grade]
+
+    text = (
+        f"{subject}\n"
+        f"🎒 {grade}\n\n"
+        "🏆 8 OYLIK O‘QUV DASTURI\n\n"
+    )
+
+    for lesson in lessons:
+        text += f"📌 {lesson}\n"
+
+    text += (
+        "\n"
+        "━━━━━━━━━━━━━━━━━━\n"
+        "🎯 MAQSAD\n"
+        "━━━━━━━━━━━━━━━━━━\n\n"
+        "Bolani bosqichma-bosqich "
+        "Prezident maktabi imtihoniga tayyorlash.\n\n"
+        "📚 Keyingi bosqichda har bir oy ichida:\n"
+        "• Dars\n"
+        "• Tushuntirish\n"
+        "• Mashqlar\n"
+        "• Test\n"
+        "• Natija\n"
+        "• Xatolar tahlili\n"
+        "• Keyingi daraja\n"
+        "\n"
+        "bo‘ladi."
+    )
+
+    await state.set_state(StudentState.subject)
+
+    await message.answer(
+        text,
+        reply_markup=back_keyboard
+    )
 
 
-# =========================
-# RENDER SERVER
-# =========================
+# =========================================================
+# FANLARGA QAYTISH
+# =========================================================
+
+@dp.message(
+    StudentState.subject,
+    F.text == "⬅️ Fanlarga qaytish"
+)
+async def back_to_subjects(message: Message, state: FSMContext):
+
+    await state.set_state(StudentState.menu)
+
+    await message.answer(
+        "📚 YO‘NALISHNI TANLANG:\n\n"
+        "Qaysi fan bo‘yicha ishlamoqchisiz?",
+        reply_markup=subject_keyboard
+    )
+
+
+# =========================================================
+# NOTO‘G‘RI FAN TUGMASI
+# =========================================================
+
+@dp.message(StudentState.menu)
+async def menu_help(message: Message):
+
+    await message.answer(
+        "❗ Iltimos, quyidagi bo‘limlardan birini tanlang:",
+        reply_markup=subject_keyboard
+    )
+
+
+# =========================================================
+# RENDER HEALTH SERVER
+# =========================================================
 
 async def health(request):
 
@@ -635,15 +474,18 @@ async def start_web_server():
     print(f"Web server started on port {PORT}")
 
 
-# =========================
+# =========================================================
 # MAIN
-# =========================
+# =========================================================
 
 async def main():
 
     await start_web_server()
 
-    print("Telegram bot started!")
+    print("====================================")
+    print("IMA PREZIDENT SCHOOL AI BOT")
+    print("Telegram bot started successfully!")
+    print("====================================")
 
     await dp.start_polling(bot)
 
